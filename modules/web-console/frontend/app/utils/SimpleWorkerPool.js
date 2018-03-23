@@ -22,6 +22,7 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/pluck';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/map';
 
 /**
  * Simple implementation of workers pool.

@@ -24,7 +24,7 @@ import org.apache.ignite.testframework.junits.common.GridAbstractExamplesTest;
  * Ignite examples self test. Excludes Ignite Spring tests.
  *
  * <h1 class="header">AOP Configuration</h1>
- * In order for this test to execute, any of the following
+ * In order for this test to executeInsert, any of the following
  * AOP configurations must be provided.
  * <h2 class="header">Jboss AOP</h2>
  * The following configuration needs to be applied to enable JBoss byte code

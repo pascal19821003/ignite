@@ -38,7 +38,7 @@ import scala.collection.JavaConversions._
  * other objects that continuously come into the system and may change frequently. In Ignite
  * such architecture is supported via cross-cache queries. By storing <i>dimensions</i> in
  * `CacheMode#REPLICATED REPLICATED` caches and <i>facts</i> in much larger
- * `CacheMode#PARTITIONED PARTITIONED` caches you can freely execute distributed joins across
+ * `CacheMode#PARTITIONED PARTITIONED` caches you can freely executeInsert distributed joins across
  * your whole in-memory data ignite cluster, thus querying your in memory data without any limitations.
  * <p/>
  * In this example we have two <i>dimensions</i>, `DimProduct` and `DimStore` and

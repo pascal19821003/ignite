@@ -66,30 +66,33 @@ public final class MessagingExample {
             // Listen for messages from remote nodes to make sure that they received all the messages.
             int msgCnt = rmtGrp.nodes().size() * MESSAGES_NUM;
 
-            CountDownLatch orderedLatch = new CountDownLatch(msgCnt);
-            CountDownLatch unorderedLatch = new CountDownLatch(msgCnt);
+//            CountDownLatch orderedLatch = new CountDownLatch(msgCnt);
+//            CountDownLatch unorderedLatch = new CountDownLatch(msgCnt);
 
-            localListen(ignite.message(ignite.cluster().forLocal()), orderedLatch, unorderedLatch);
+
+//            localListen(ignite.message(ignite.cluster().forLocal()));
+//            localListen(ignite.message(ignite.cluster().forLocal()), orderedLatch, unorderedLatch);
 
             // Register listeners on all cluster nodes.
             startListening(ignite, ignite.message(rmtGrp));
 
             // Send unordered messages to all remote nodes.
-            for (int i = 0; i < MESSAGES_NUM; i++)
-                ignite.message(rmtGrp).send(TOPIC.UNORDERED, Integer.toString(i));
-
-            System.out.println(">>> Finished sending unordered messages.");
+//            for (int i = 0; i < MESSAGES_NUM; i++)
+//                ignite.message(rmtGrp).send(TOPIC.UNORDERED, Integer.toString(i));
+//
+//            System.out.println(">>> Finished sending unordered messages.");
 
             // Send ordered messages to all remote nodes.
             for (int i = 0; i < MESSAGES_NUM; i++)
-                ignite.message(rmtGrp).sendOrdered(TOPIC.ORDERED, Integer.toString(i), 0);
+//                ignite.message(rmtGrp).sendOrdered(TOPIC.ORDERED, Integer.toString(i), 0);
+                   ignite.message(rmtGrp).send(TOPIC.ORDERED, Integer.toString(i));
 
             System.out.println(">>> Finished sending ordered messages.");
             System.out.println(">>> Check output on all nodes for message printouts.");
             System.out.println(">>> Will wait for messages acknowledgements from all remote nodes.");
 
-            orderedLatch.await();
-            unorderedLatch.await();
+//            orderedLatch.await();
+//            unorderedLatch.await();
 
             System.out.println(">>> Messaging example finished.");
         }
@@ -107,30 +110,49 @@ public final class MessagingExample {
         imsg.remoteListen(TOPIC.ORDERED, (nodeId, msg) -> {
             System.out.println("Received ordered message [msg=" + msg + ", fromNodeId=" + nodeId + ']');
 
-            try {
-                ignite.message(ignite.cluster().forNodeId(nodeId)).send(TOPIC.ORDERED, msg);
-            }
-            catch (IgniteException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                ignite.message(ignite.cluster().forNodeId(nodeId)).send(TOPIC.ORDERED, msg);
+//            }
+//            catch (IgniteException e) {
+//                e.printStackTrace();
+//            }
 
             return true; // Return true to continue listening.
         });
 
-        // Add unordered message listener.
-        imsg.remoteListen(TOPIC.UNORDERED, (nodeId, msg) -> {
-            System.out.println("Received unordered message [msg=" + msg + ", fromNodeId=" + nodeId + ']');
-
-            try {
-                ignite.message(ignite.cluster().forNodeId(nodeId)).send(TOPIC.UNORDERED, msg);
-            }
-            catch (IgniteException e) {
-                e.printStackTrace();
-            }
-
-            return true; // Return true to continue listening.
-        });
+//        // Add unordered message listener.
+//        imsg.remoteListen(TOPIC.UNORDERED, (nodeId, msg) -> {
+//            System.out.println("Received unordered message [msg=" + msg + ", fromNodeId=" + nodeId + ']');
+//
+//            try {
+//                ignite.message(ignite.cluster().forNodeId(nodeId)).send(TOPIC.UNORDERED, msg);
+//            }
+//            catch (IgniteException e) {
+//                e.printStackTrace();
+//            }
+//
+//            return true; // Return true to continue listening.
+//        });
     }
+
+
+    /**
+     * Listen for messages from remote nodes.
+     *
+     * @param imsg Ignite messaging.
+//     * @param orderedLatch Latch for ordered messages acks.
+     */
+    private static void localListen(
+            IgniteMessaging imsg
+    ) {
+        imsg.localListen(TOPIC.ORDERED, (nodeId, msg) -> {
+
+
+            return new Boolean(true);
+        });
+
+    }
+
 
     /**
      * Listen for messages from remote nodes.
@@ -147,6 +169,7 @@ public final class MessagingExample {
         imsg.localListen(TOPIC.ORDERED, (nodeId, msg) -> {
             orderedLatch.countDown();
 
+            System.out.println("收到有序消息：" + msg);
             // Return true to continue listening, false to stop.
             return orderedLatch.getCount() > 0;
         });
@@ -154,6 +177,7 @@ public final class MessagingExample {
         imsg.localListen(TOPIC.UNORDERED, (nodeId, msg) -> {
             unorderedLatch.countDown();
 
+            System.out.println("收到无序消息：" + msg);
             // Return true to continue listening, false to stop.
             return unorderedLatch.getCount() > 0;
         });

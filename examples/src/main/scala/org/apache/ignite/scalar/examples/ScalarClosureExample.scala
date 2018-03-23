@@ -65,7 +65,7 @@ object ScalarClosureExample extends App {
     }
 
     /**
-     * One way to execute closures on the ignite cluster.
+     * One way to executeInsert closures on the ignite cluster.
      */
     def broadcast() {
         ignite$.bcastRun(() => println("Broadcasting!!!"), null)

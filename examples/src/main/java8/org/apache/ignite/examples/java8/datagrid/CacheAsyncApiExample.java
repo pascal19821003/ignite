@@ -75,7 +75,12 @@ public class CacheAsyncApiExample {
                 futs.forEach(IgniteFuture::get);
 
                 // Execute get operation asynchronously.
-                asyncCache.get(1);
+//                asyncCache.get(1);
+
+                //test
+                for (int i=0;i<10;i++){
+                    asyncCache.get(i);
+                }
 
                 // Asynchronously wait for result.
                 asyncCache.<String>future().listen(fut ->

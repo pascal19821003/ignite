@@ -24,6 +24,17 @@ import org.apache.ignite.configuration.IgniteConfiguration;
 import org.apache.ignite.lifecycle.LifecycleBean;
 import org.apache.ignite.lifecycle.LifecycleEventType;
 import org.apache.ignite.resources.IgniteInstanceResource;
+import org.apache.ignite.spi.IgniteSpiContext;
+import org.apache.ignite.spi.IgniteSpiException;
+import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
+import org.apache.ignite.spi.discovery.tcp.ipfinder.TcpDiscoveryIpFinder;
+import org.apache.ignite.spi.discovery.tcp.ipfinder.multicast.TcpDiscoveryMulticastIpFinder;
+//import scala.actors.threadpool.Arrays;
+
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import static org.apache.ignite.lifecycle.LifecycleEventType.AFTER_NODE_START;
 import static org.apache.ignite.lifecycle.LifecycleEventType.AFTER_NODE_STOP;
@@ -54,7 +65,24 @@ public final class LifecycleExample {
         // Provide lifecycle bean to configuration.
         cfg.setLifecycleBeans(bean);
 
+        TcpDiscoverySpi tcpDiscoverySpi = new TcpDiscoverySpi();
+        TcpDiscoveryIpFinder ipFinder = new TcpDiscoveryMulticastIpFinder() ;
+
+        Collection< InetSocketAddress> addrs = new ArrayList();
+        for (int i = 47500; i<=47509 ;i++){
+            addrs.add(new InetSocketAddress("pascal", i));
+        }
+
+        ipFinder.registerAddresses(addrs);
+        tcpDiscoverySpi.setIpFinder(ipFinder);
+
+//        cfg.setDiscoverySpi(tcpDiscoverySpi);
+
+        //peerClassLoadingEnabled
+        cfg.setPeerClassLoadingEnabled(true);
+
         try (Ignite ignite  = Ignition.start(cfg)) {
+//            ignite.configuration().setLifecycleBeans(bean);
             // Make sure that lifecycle bean was notified about ignite startup.
             assert bean.isStarted();
         }
@@ -78,12 +106,16 @@ public final class LifecycleExample {
         @Override public void onLifecycleEvent(LifecycleEventType evt) {
             System.out.println();
             System.out.println(">>> Lifecycle event occurred: " + evt);
-            System.out.println(">>> Ignite name: " + ignite.name());
+//            System.out.println(">>> Ignite name: " + ignite.name());
 
-            if (evt == AFTER_NODE_START)
+            if (evt == AFTER_NODE_START){
                 isStarted = true;
-            else if (evt == AFTER_NODE_STOP)
+                System.out.println("节点启动了");
+            }
+            else if (evt == AFTER_NODE_STOP) {
                 isStarted = false;
+                System.out.println("节点停止了");
+            }
         }
 
         /**

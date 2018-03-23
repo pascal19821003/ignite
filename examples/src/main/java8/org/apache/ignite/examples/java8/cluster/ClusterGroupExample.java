@@ -25,6 +25,8 @@ import org.apache.ignite.cluster.ClusterGroup;
 import org.apache.ignite.examples.ExampleNodeStartup;
 import org.apache.ignite.examples.ExamplesUtils;
 
+import java.util.Scanner;
+
 /**
  * Demonstrates new functional APIs.
  * <p>
@@ -42,34 +44,52 @@ public class ClusterGroupExample {
      * @throws IgniteException If example execution failed.
      */
     public static void main(String[] args) throws IgniteException {
+
+        Scanner scanner = new Scanner(System.in);
+        Boolean running = true;
         try (Ignite ignite = Ignition.start("examples/config/example-ignite.xml")) {
             if (!ExamplesUtils.checkMinTopologySize(ignite.cluster(), 2))
                 return;
 
-            System.out.println();
+            System.out.println("=============================集群的例子=============================");
             System.out.println("Compute example started.");
-
+            System.out.printf("Usage: " +
+                    " 1: Say hello to all nodes in the cluster, including local node;" +
+                    " 2: Say hello to all remote nodes.;" +
+                    " 3: Pick random node out of remote nodes.;" +
+                    " 4: Say hello to a random node.;" +
+                    " 5: Say hello to all nodes residing on the same host with random node.;" +
+                    " 0: exit the terminal.");
             IgniteCluster cluster = ignite.cluster();
 
-            // Say hello to all nodes in the cluster, including local node.
-            sayHello(ignite, cluster);
-
-            // Say hello to all remote nodes.
-            sayHello(ignite, cluster.forRemotes());
-
-            // Pick random node out of remote nodes.
-            ClusterGroup randomNode = cluster.forRemotes().forRandom();
-
-            // Say hello to a random node.
-            sayHello(ignite, randomNode);
-
-            // Say hello to all nodes residing on the same host with random node.
-            sayHello(ignite, cluster.forHost(randomNode.node()));
-
-            // Say hello to all nodes that have current CPU load less than 50%.
-            sayHello(ignite, cluster.forPredicate(n -> n.metrics().getCurrentCpuLoad() < 0.5));
+            while(running){
+                String command = scanner.nextLine();
+                if("0".equals(command)){
+                    running = false;
+                }else if("1".equals(command)){
+                    // Say hello to all nodes in the cluster, including local node.
+                    sayHello(ignite, cluster);
+                }else if("2".equals(command)){
+                    // Say hello to all remote nodes.
+                    sayHello(ignite, cluster.forRemotes());
+                }else if("3".equals(command)){
+                    // Pick random node out of remote nodes.
+                    ClusterGroup randomNode = cluster.forRemotes().forRandom();
+                    // Say hello to a random node.
+                    sayHello(ignite, randomNode);
+                }else if("4".equals(command)){
+                    // Pick random node out of remote nodes.
+                    ClusterGroup randomNode = cluster.forRemotes().forRandom();
+                    // Say hello to all nodes residing on the same host with random node.
+                    sayHello(ignite, cluster.forHost(randomNode.node()));
+                }else if("5".equals(command)){
+                    // Say hello to all nodes that have current CPU load less than 50%.
+                    sayHello(ignite, cluster.forPredicate(n -> n.metrics().getCurrentCpuLoad() < 0.5));
+                }
+            }
         }
     }
+
 
     /**
      * Print 'Hello' message on remote nodes.

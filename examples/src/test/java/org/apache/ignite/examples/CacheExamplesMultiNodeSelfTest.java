@@ -17,7 +17,7 @@
 
 package org.apache.ignite.examples;
 
-import org.apache.ignite.examples.datagrid.JdbcExample;
+import org.apache.ignite.examples.test.JdbcExample;
 
 /**
  * Cache examples multi-node self test.

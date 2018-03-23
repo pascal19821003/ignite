@@ -35,7 +35,7 @@ import java.util
  * without blocking threads.
  * <p/>
  * Note that because this example utilizes local node storage via `NodeLocal`,
- * it gets faster if you execute it multiple times, as the more you execute it,
+ * it gets faster if you executeInsert it multiple times, as the more you executeInsert it,
  * the more values it will be cached on remote nodes.
  * <p/>
  * Remote nodes should always be started with special configuration file which
@@ -72,7 +72,7 @@ object ScalarContinuationExample {
 }
 
 /**
- * Closure to execute.
+ * Closure to executeInsert.
  *
  * @param excludeNodeId Node to exclude from execution if there are more then 1 node in cluster.
  */

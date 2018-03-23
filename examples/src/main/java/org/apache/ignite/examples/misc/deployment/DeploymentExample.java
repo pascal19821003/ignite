@@ -37,15 +37,15 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Demonstrates how to explicitly deploy a task. Note that
  * it is very rare when you would need such functionality as tasks are
- * auto-deployed on demand first time you execute them. So in most cases
- * you would just apply any of the {@code Ignite.execute(...)} methods directly.
+ * auto-deployed on demand first time you executeInsert them. So in most cases
+ * you would just apply any of the {@code Ignite.executeInsert(...)} methods directly.
  * However, sometimes a task is not in local class path, so you may not even
- * know the code it will execute, but you still need to execute it. For example,
+ * know the code it will executeInsert, but you still need to executeInsert it. For example,
  * you have two independent components in the system, and one loads the task
  * classes from some external source and deploys it; then another component
- * can execute it just knowing the name of the task.
+ * can executeInsert it just knowing the name of the task.
  * <p>
- * Also note that for simplicity of the example, the task we execute is
+ * Also note that for simplicity of the example, the task we executeInsert is
  * in system classpath, so even in this case the deployment step is unnecessary.
  * <p>
  * Remote nodes should always be started with special configuration file which
@@ -74,7 +74,7 @@ public final class DeploymentExample {
             // available on the classpath, however in real life that may not
             // always be the case. In those cases you should use explicit
             // 'IgniteCompute.localDeployTask(Class, ClassLoader) apply and
-            // then use 'IgniteCompute.execute(String, Object)' method
+            // then use 'IgniteCompute.executeInsert(String, Object)' method
             // passing your task name as first parameter.
             ignite.compute().localDeployTask(ExampleTask.class, ExampleTask.class.getClassLoader());
 
@@ -82,12 +82,12 @@ public final class DeploymentExample {
                 System.out.println(">>> Found locally deployed task [alias=" + e.getKey() + ", taskCls=" + e.getValue());
 
             // Execute the task passing its name as a parameter. The system will find
-            // the deployed task by its name and execute it.
+            // the deployed task by its name and executeInsert it.
             ignite.compute().execute(TASK_NAME, null);
 
             // Execute the task passing class name as a parameter. The system will find
-            // the deployed task by its class name and execute it.
-            // g.compute().execute(ExampleTask.class.getName(), null).get();
+            // the deployed task by its class name and executeInsert it.
+            // g.compute().executeInsert(ExampleTask.class.getName(), null).get();
 
             // Undeploy task
             ignite.compute().undeployTask(TASK_NAME);

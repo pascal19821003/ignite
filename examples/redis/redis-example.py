@@ -17,7 +17,7 @@
 
 import redis
 '''
-To execute this script, run an Ignite instance with 'redis-ignite-internal-cache-0' cache specified and configured.
+To executeInsert this script, run an Ignite instance with 'redis-ignite-internal-cache-0' cache specified and configured.
 You will also need to have 'redis-py' installed.
 See https://github.com/andymccurdy/redis-py for the details on redis-py.
 

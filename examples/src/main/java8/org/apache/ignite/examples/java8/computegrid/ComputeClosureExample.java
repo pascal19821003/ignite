@@ -46,19 +46,25 @@ public class ComputeClosureExample {
     public static void main(String[] args) throws IgniteException {
         try (Ignite ignite = Ignition.start("examples/config/example-ignite.xml")) {
             System.out.println();
-            System.out.println(">>> Compute closure example started.");
+            System.out.println(">>> Compute closure example started. Ignite Web Console is an interactive configuration wizard, management and monitoring tool that allows you to. ");
 
             // Execute closure on all cluster nodes.
             Collection<Integer> res = ignite.compute().apply(
                 (String word) -> {
                     System.out.println();
+                    try {
+                        Thread.sleep(1000*10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
                     System.out.println(">>> Printing '" + word + "' on this node from ignite job.");
 
                     // Return number of letters in the word.
                     return word.length();
                 },
                 // Job parameters. Ignite will create as many jobs as there are parameters.
-                Arrays.asList("Count characters using closure".split(" "))
+                Arrays.asList("Count characters using closure Ignite ships with Ignite Web console - a web application that can be deployed on your system environment. It allows configuring all the cluster properties and import schema from a database for integrating with persistence stores. It can connect to the specified database and generate all the required OR-mapping configuration (XML and pure Java) and Java domain model POJOs. The web console also features cluster monitoring functionality (available separately as GridGain plugin) that shows various cache and node metrics as well as CPU and heap usage".split(" "))
             );
 
             int sum = res.stream().mapToInt(i -> i).sum();

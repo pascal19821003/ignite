@@ -17,16 +17,16 @@
 
 package org.apache.ignite.examples.datagrid;
 
-import org.apache.ignite.Ignite;
-import org.apache.ignite.IgniteCache;
-import org.apache.ignite.IgniteException;
-import org.apache.ignite.Ignition;
+import org.apache.ignite.*;
 import org.apache.ignite.cache.CacheAtomicityMode;
 import org.apache.ignite.cache.CacheMode;
 import org.apache.ignite.configuration.CacheConfiguration;
 import org.apache.ignite.configuration.DataStorageConfiguration;
 import org.apache.ignite.configuration.DataRegionConfiguration;
 import org.apache.ignite.examples.ExampleNodeStartup;
+
+import java.util.Collection;
+import java.util.Scanner;
 
 /**
  * This example demonstrates how to tweak particular settings of Apache Ignite page memory using
@@ -39,7 +39,7 @@ import org.apache.ignite.examples.ExampleNodeStartup;
  * Alternatively you can run {@link ExampleNodeStartup} in another JVM which passing
  * {@code examples/config/example-data-regions.xml} configuration to it.
  */
-public class DataRegionsExample {
+    public class DataRegionsExample {
     /** Name of the default data region defined in 'example-data-regions.xml'. */
     public static final String REGION_DEFAULT = "Default_Region";
 
@@ -75,8 +75,8 @@ public class DataRegionsExample {
             secondCacheCfg.setCacheMode(CacheMode.REPLICATED);
             secondCacheCfg.setAtomicityMode(CacheAtomicityMode.ATOMIC);
 
-            IgniteCache<Integer, Integer> firstCache = ignite.createCache(firstCacheCfg);
-            IgniteCache<Integer, Integer> secondCache = ignite.createCache(secondCacheCfg);
+            IgniteCache<Integer, Integer> firstCache = ignite.getOrCreateCache(firstCacheCfg);
+            IgniteCache<Integer, Integer> secondCache = ignite.getOrCreateCache(secondCacheCfg);
 
             System.out.println(">>> Started two caches bound to '" + REGION_40MB_EVICTION + "' memory region.");
 
@@ -88,7 +88,7 @@ public class DataRegionsExample {
 
             thirdCacheCfg.setDataRegionName(REGION_30MB_MEMORY_MAPPED_FILE);
 
-            IgniteCache<Integer, Integer> thirdCache = ignite.createCache(thirdCacheCfg);
+            IgniteCache<Integer, Integer> thirdCache = ignite.getOrCreateCache(thirdCacheCfg);
 
             System.out.println(">>> Started a cache bound to '" + REGION_30MB_MEMORY_MAPPED_FILE + "' memory region.");
 
@@ -98,11 +98,47 @@ public class DataRegionsExample {
              */
             CacheConfiguration<Integer, Integer> fourthCacheCfg = new CacheConfiguration<>("fourthCache");
 
-            IgniteCache<Integer, Integer> fourthCache = ignite.createCache(fourthCacheCfg);
+            IgniteCache<Integer, Integer> fourthCache = ignite.getOrCreateCache(fourthCacheCfg);
 
             System.out.println(">>> Started a cache bound to '" + REGION_DEFAULT + "' memory region.");
 
             System.out.println(">>> Destroying caches...");
+
+
+
+            // Get the metrics of all the data regions configured on a node.
+            Collection<DataRegionMetrics> regionsMetrics = ignite.dataRegionMetrics();
+
+// Print out some of the metrics.
+            for (DataRegionMetrics metrics : regionsMetrics) {
+                System.out.println(">>> Memory Region Name: " + metrics.getName());
+                System.out.println(">>> Allocation Rate: " + metrics.getAllocationRate());
+                System.out.println(">>> Fill Factor: " + metrics.getPagesFillFactor());
+            }
+
+            ////////////////////////////////////////
+            //
+//            // Getting metrics.
+//            DataStorageMetrics pm = ignite.dataStorageMetrics();
+//
+//            System.out.println("Fsync duration: " + pm.getLastCheckpointFsyncDuration());
+//
+//            System.out.println("Data pages: " + pm.getLastCheckpointDataPagesNumber());
+//
+//            System.out.println("Checkpoint duration:" + pm.getLastCheckpointDuration());
+
+            // ///////////////////////////////////
+
+            Scanner scanner = new Scanner(System.in);
+            Boolean running = true;
+            System.out.printf("Usage: " +
+                    " 0: exit the terminal. \n");
+            while(running) {
+                String command = scanner.nextLine();
+                if ("0".equals(command)) {
+                    running = false;
+                }
+            }
 
             firstCache.destroy();
             secondCache.destroy();

@@ -32,7 +32,7 @@ import scala.util.control.Breaks._
  * You can start as many as you like by executing the following script:
  * `{IGNITE_HOME}/bin/ignite.{bat|sh} examples/config/example-ignite.xml`
  * <p/>
- * Once remote instances are started, you can execute this example from
+ * Once remote instances are started, you can executeInsert this example from
  * Eclipse, IntelliJ IDEA, or NetBeans (and any other Java IDE) by simply hitting run
  * button. You will see that all nodes discover each other and
  * all of the nodes will participate in task execution (check node

@@ -85,7 +85,7 @@ public class ComputeFailoverExample {
         /**
          * The job will check the checkpoint with key '{@code fail}' and if
          * it's {@code true} it will throw exception to simulate a failure.
-         * Otherwise, it will execute enabled method.
+         * Otherwise, it will executeInsert enabled method.
          */
         @Override public Integer apply(String phrase) {
             System.out.println();

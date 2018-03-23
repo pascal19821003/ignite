@@ -110,7 +110,7 @@ public class CacheHibernateStoreExample {
                 // method on all nodes in topology.
                 loadCache(cache);
 
-                // Start transaction and execute several cache operations with
+                // Start transaction and executeInsert several cache operations with
                 // read/write-through to persistent store.
                 executeTransaction(cache);
             }
@@ -140,7 +140,7 @@ public class CacheHibernateStoreExample {
     /**
      * Executes transaction with read/write-through to persistent store.
      *
-     * @param cache Cache to execute transaction on.
+     * @param cache Cache to executeInsert transaction on.
      */
     private static void executeTransaction(IgniteCache<Long, Person> cache) {
         try (Transaction tx = Ignition.ignite().transactions().txStart()) {

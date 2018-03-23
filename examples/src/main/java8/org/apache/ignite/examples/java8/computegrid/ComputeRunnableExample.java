@@ -51,6 +51,7 @@ public class ComputeRunnableExample {
             for (final String word : "Print words using runnable".split(" ")) {
                 // Execute runnable on some node.
                 compute.run(() -> {
+                    System.out.println("当前节点是：" + ignite.cluster().localNode().hostNames());
                     System.out.println();
                     System.out.println(">>> Printing '" + word + "' on this node from ignite job.");
                 });

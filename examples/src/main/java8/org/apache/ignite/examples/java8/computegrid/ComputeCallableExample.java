@@ -53,7 +53,7 @@ public class ComputeCallableExample {
             Collection<IgniteCallable<Integer>> calls = new ArrayList<>();
 
             // Iterate through all words in the sentence and create callable jobs.
-            for (String word : "Count characters using callable".split(" ")) {
+            for (String word : "pan rui ni hao".split(" ")) {
                 calls.add(() -> {
                     System.out.println();
                     System.out.println(">>> Printing '" + word + "' on this node from ignite job.");

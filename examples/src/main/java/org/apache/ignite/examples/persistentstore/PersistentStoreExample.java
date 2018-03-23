@@ -29,11 +29,12 @@ import org.apache.ignite.cache.query.SqlFieldsQuery;
 import org.apache.ignite.configuration.CacheConfiguration;
 import org.apache.ignite.examples.datagrid.CacheQueryExample;
 import org.apache.ignite.examples.model.Organization;
+import org.apache.ignite.examples.model.Person;
 
 /**
  * This example demonstrates the usage of Apache Ignite Persistent Store.
  * <p>
- * To execute this example you should start an instance of {@link PersistentStoreExampleNodeStartup}
+ * To executeInsert this example you should start an instance of {@link PersistentStoreExampleNodeStartup}
  * class which will start up an Apache Ignite remote server node with a proper configuration.
  * <p>
  * When {@code UPDATE} parameter of this example is set to {@code true}, the example will populate
@@ -74,25 +75,28 @@ public class PersistentStoreExample {
 
             IgniteCache<Long, Organization> cache = ignite.getOrCreateCache(cacheCfg);
 
-            if (UPDATE) {
-                System.out.println("Populating the cache...");
+//            if (UPDATE) {
+//                System.out.println("Populating the cache...");
+//
+//                try (IgniteDataStreamer<Long, Organization> streamer = ignite.dataStreamer(ORG_CACHE)) {
+//                    streamer.allowOverwrite(true);
+//
+//                    for (long i = 0; i < 100_000; i++) {
+//                        streamer.addData(i, new Organization(i, "organization-" + i));
+//
+//                        if (i > 0 && i % 10_000 == 0)
+//                            System.out.println("Done: " + i);
+//                    }
+//                }
+//            }
 
-                try (IgniteDataStreamer<Long, Organization> streamer = ignite.dataStreamer(ORG_CACHE)) {
-                    streamer.allowOverwrite(true);
 
-                    for (long i = 0; i < 100_000; i++) {
-                        streamer.addData(i, new Organization(i, "organization-" + i));
 
-                        if (i > 0 && i % 10_000 == 0)
-                            System.out.println("Done: " + i);
-                    }
-                }
-            }
 
-            // Run SQL without explicitly calling to loadCache().
             QueryCursor<List<?>> cur = cache.query(
-                new SqlFieldsQuery("select id, name from Organization where name like ?")
-                    .setArgs("organization-54321"));
+                    new SqlFieldsQuery("select id, name from Organization where name like ?")
+
+                            .setArgs("organization-54321"));
 
             System.out.println("SQL Result: " + cur.getAll());
 

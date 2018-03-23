@@ -96,7 +96,7 @@ public final class CacheAffinityExample {
         for (int i = 0; i < KEY_CNT; i++) {
             int key = i;
 
-            // This runnable will execute on the remote node where
+            // This runnable will executeInsert on the remote node where
             // data with the given key is located. Since it will be co-located
             // we can use local 'peek' operation safely.
             ignite.compute().affinityRun(CACHE_NAME, key,

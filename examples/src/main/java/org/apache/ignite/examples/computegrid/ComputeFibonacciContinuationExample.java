@@ -93,7 +93,7 @@ public final class ComputeFibonacciContinuationExample {
     }
 
     /**
-     * Closure to execute.
+     * Closure to executeInsert.
      */
     private static class ContinuationFibonacciClosure implements IgniteClosure<Long, BigInteger> {
         /** Future for spawned task. */
